@@ -1,0 +1,313 @@
+"essential vim features
+augroup vimessentials
+    autocmd!
+    
+    syn on
+    set number
+
+
+    inoremap <Nul> <C-p>
+    inoremap <C-space> <C-p>
+
+    set tabstop=4
+    set shiftwidth=4
+    set expandtab
+    set autoindent
+    set smarttab
+    set cindent
+    filetype plugin indent on
+    syntax on
+    set mouse=nvc
+
+    "to turn off beep
+    set noeb vb t_vb=
+
+    set nofoldenable " disable folding
+    "set clipboard=unnamedplus,unnamed,autoselect
+
+    syntax enable
+
+    "using the colorscheme wombat15
+    colorscheme wombat15
+
+    "Solarized commands
+    "if you would prefer to used solarized, uncomment the below (need to install pathogen/solarized first)
+    "uncomment the 'set t_Co=256' line and perhaps move it to line 7...
+    "set t_Co=256
+    "execute pathogen#infect()
+    "syntax enable
+    "set background=dark
+    "let g:solarized_visibility = "high"
+    "let g:solarized_contrast = "high"
+    "let g:solarized_termcolors=256
+    "colorscheme solarized
+augroup END
+
+
+
+
+"python cmds
+"current removed
+augroup pythoncmds
+    autocmd!
+    autocmd FileType python syn match pyEquals /[=]/
+    autocmd FileType python syn match pyDelimiter /[\(\)\{\}\[\]]/
+    autocmd FileType python syn match pyDelimiter2 /[,;:]/
+    autocmd FileType python syn match pyMathOperators /[+^%/*]/
+    "autocmd FileType python syn match pyMathOperators /[+^%/*\<-\>]/
+    autocmd FileType python syn keyword pyBoolean  False True None
+    "autocmd FileType r setlocal foldmethod=indent smartindent shiftwidth=4 ts=4 et cinwords=if,else,for,while
+    "autocmd FileType python setlocal foldmethod=indent smartindent shiftwidth=4 ts=4 et cinwords=if,elif,else,for,while,try,except,finally,def,class
+augroup END
+
+
+
+"R cmds
+augroup rcmds
+    autocmd!
+    "http://learnvimscriptthehardway.stevelosh.com/chapters/44.html
+    au BufNewFile,BufRead *.R set filetype=r
+    "this line should take care of the annoying removal of indentation by cindent, when # is used in R/Python
+    ""this is used if commenting inline; rather place # in the left-most position
+    autocmd FileType r inoremap # X#<Left><BS><Right>
+
+    
+    "This command takes care of commenting with #
+    "autocmd FileType r inoremap # X#<Left><BS>
+    "the next line was used before the togglecomment code at the bottom
+    "can also use with numbers, e.g. 3@@ to comment three lines
+    "autocmd FileType r nnoremap @@ @='IX#<C-V><Esc>hxj'<CR>k
+    
+    "these lines force syntax matching for r files
+    autocmd FileType r syn match rMathOperators /[+^%/*]/
+    autocmd FileType r syn match rDollar /[$]/
+    autocmd FileType r syn match rEquals /[=]/
+    autocmd FileType r syn keyword rHappy happy
+    autocmd FileType r syn match rRequire /require/
+    "autocmd FileType r syn keyword rComparisons <= >= == < > joe
+    autocmd FileType r syn match rComparisons /[ < ][ > ]/
+    "autocmd FileType r syn match rComparisonsMore /<\{1,2}=/ />\{1,2}=/ /=\{1,2}=/
+    "autocmd FileType r syn match rComparisonsMore /[<\{1,2}=][=\{1,2}=]/
+    autocmd FileType r syn match rComparisonsMore /[<>\{1,2}=][=\{1,2}=]/
+    "autocmd FileType r syn match rComparisonsMore /<\{1,2}=/
+augroup END
+
+"txt commands
+"txt files with the first line containing a single # follow conf.vim
+"http://superuser.com/questions/216676/vim-syntax-highlighting-disappeared-for-text-files-txt
+augroup confcmds
+    autocmd!
+    "makes lines starting with # blue
+    autocmd FileType conf highlight Comment ctermfg=110
+augroup END
+
+"LaTeX commands, from JG
+augroup texcmds
+    autocmd!
+    "http://learnvimscriptthehardway.stevelosh.com/chapters/44.html
+    au BufNewFile,BufRead *.tex set filetype=tex
+    "try <Esc>:set filetype?
+    "autocmd FileType tex map <buffer> <F7> :silent !skim: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
+    autocmd FileType tex map <buffer> <F5>  :!open /Applications/Skim.app: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
+    autocmd FileType tex map <buffer> <F6> :w<CR>:!pdflatex % <CR><CR>
+"     autocmd FileType tex map <buffer> <F8> :w<CR>:!bibtex %:r.aux <CR><CR>
+    "autocmd FileType tex setlocal spell spelllang=en_gb
+    "autocmd FileType tex map inoremap item<CR> \begin{itemize}<CR> \item<CR><BS>\end{itemize}<Esc>ka<Space>
+    "autocmd FileType tex map inoremap item<CR> \begin{itemize}<CR> \item<CR><BS>\end{itemize}<Esc>ka<Space>
+    autocmd FileType tex map <buffer> \item<CR> i\begin{itemize}<CR> \item<CR><BS>\end{itemize}<Esc>ka<Space>
+    autocmd FileType tex map <buffer> \enum<CR> i\begin{enumerate}<CR> \item<CR><BS>\end{enumerate}<Esc>ka<Space>
+    autocmd FileType tex map <buffer> \eq<CR> i\begin{equation}<CR><CR>\end{equation}<Esc>kli<Space>
+    autocmd FileType tex map <buffer> \eqn<CR> i\begin{equation}<CR><CR>%\label{eq:}<CR>%\nonumber<CR>\end{equation}<Esc>3ki<Space>
+    autocmd FileType tex map <buffer> \al<CR> i\begin{align}<CR><CR>\end{align}<Esc>kli<Space>
+    autocmd FileType tex map <buffer> \aln<CR> i\begin{align}<CR><CR>%\label{eq:}<CR>%\nonumber<CR>\end{align}<Esc>3ki<Space>
+    autocmd FileType tex map <buffer> \frame<CR> i\begin{frame}<CR>\frametitle{}<CR><CR>\end{frame}<Esc>kla
+    autocmd FileType tex map <buffer> \fig<CR> i<CR>\begin{figure}[h]<CR>\centering<CR>\includegraphics[width=10cm]{figurefile}<CR>%\caption{abc}<CR>%\label{fig:}<CR>\end{figure}<CR><Esc>4k$b
+    autocmd FileType tex map <buffer> \doc<CR> i\documentclass[12pt]{article}<CR>\usepackage{amsmath}<CR>\usepackage{amssymb}<CR>\usepackage{graphicx}<CR><CR>\begin{document}<CR>Hello<CR><CR>\end{document}<Esc>:7<CR>
+    autocmd FileType tex map <buffer> \beam<CR> i\documentclass[12pt]{beamer}<CR>\usepackage{amsmath}<CR>\usepackage{amssymb}<CR>\usepackage{graphicx}<CR><CR>\begin{document}<CR>Hello<CR><CR>\end{document}<Esc>:7<CR>
+    autocmd FileType tex map <buffer> \sec<CR> i\section{} \label{sec:}<CR><CR><Esc>2k08la
+    autocmd FileType tex map <buffer> \bib<CR> i\bibliography{.bib}{ }<CR>\bibliographystyle{plain}<CR><Esc>2k014li
+    autocmd FileType tex map <buffer> \sep<CR> i%-<Esc>x80pa%<Esc>0o<Esc>
+    autocmd FileType tex inoremap <C-l> <Esc>la
+    autocmd FileType tex inoremap <C-h> <Esc>ha
+    "autocmd FileType tex inoremap <C-l> <Esc>lli
+
+    "need to create a file main.tex.latexmaster, containing one character
+    autocmd FileType tex map <buffer> <F7>  :call CompileMasterFile() <CR><CR>
+    
+    autocmd FileType tex map <buffer> \(<CR> i\left(<Space>\right)<Esc>3ba
+    autocmd FileType tex map <buffer> \[<CR> i\left[<Space>\right]<Esc>3ba
+    autocmd FileType tex let b:dispatch = 'pdflatex %'
+
+    autocmd BufNewFile,BufRead *.tex set makeprg=pdflatex\ %\ &&\ open\ %:r.pdf
+    "autocmd FileType tex compiler !pdflatex %
+    "none of these works...
+"     autocmd FileType tex nnoremap <F9> :Dispatch <CR>
+"     autocmd FileType tex map <buffer> <F9> :w<CR>  <CR><CR>
+"     autocmd FileType tex nnoremap <F9> :w<cr> :silent :!pdflatex -interaction=nonstopmode % <cr><cr>
+
+
+"Ideas for creating these functions from:
+"http://vim-latex.sourceforge.net/documentation/latex-suite/latex-master-file.html#Tex_MainFileExpression
+"and
+"http://vi.stackexchange.com/questions/2408/vimscript-save-file
+"and
+"http://stackoverflow.com/questions/890802/how-do-i-disable-the-press-enter-or-type-command-to-continue-prompt-in-vim
+    function! CompileMasterFile()
+        let mainfilename = GetMasterFileName()
+        let mainauxfilename = GetMasterFileNameAux()
+        if mainfilename != ''
+            "save and compile with pdflatex
+            :w
+            execute ':silent !pdflatex ' mainfilename
+            execute ':silent !bibtex ' mainauxfilename 
+            execute ':silent !bibtex ' mainauxfilename 
+            execute ':silent !pdflatex ' mainfilename
+            execute '!pdflatex ' mainfilename
+        else
+            "if no master file found, show message
+            echom "No master file found (e.g. myfile.tex.latexmaster)"
+        endif
+    endfunction
+    
+"we indicate the name of mymain.tex by creating a file mymain.tex.latexmaster,
+"which can be empty (or just contain a blank line
+    function! GetMasterFileName()
+        if glob('*.latexmaster') != ''
+            "this just removes the '.latexmaster' bit
+            return split(glob('*.latexmaster'), ".latexmaster")[0]
+        else
+            return ''
+        endif
+    endfunction
+    
+"in order for bibtex to work, we need the 'mymain.aux' filename
+"this seems to be one way to obtain it
+    function! GetMasterFileNameAux()
+        if glob('*.latexmaster') != ''
+            "this removes the 'tex.latexmaster' bit and replaces it with 'aux'
+            return join([split(glob('*.latexmaster'), ".tex.latexmaster")[0], "aux"], ".")
+        else
+            return ''
+        endif
+    endfunction
+
+augroup END
+
+
+
+augroup highlight
+    autocmd!
+    "autohighlight commands
+    " http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
+    " Highlight all instances of word under cursor, when idle.
+    " Useful when studying strange source code.
+    " http://vimdoc.sourceforge.net/htmldoc/editing.html#ZZ
+    " http://vimdoc.sourceforge.net/htmldoc/scroll.html#zz
+    nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+    function! AutoHighlightToggle()
+      let @/ = ''
+      if exists('#auto_highlight')
+        au! auto_highlight
+        augroup! auto_highlight
+        setl updatetime=4000
+        echo 'Highlight current word: off'
+        return 0
+      else
+        augroup auto_highlight
+          au!
+          au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+        augroup end
+        setl updatetime=500
+        echo 'Highlight current word: ON'
+        return 1
+      endif
+    endfunction
+
+
+    "tells us the colour group under the cursor by pression <F10>
+    "http://vim.wikia.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+    map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+augroup END
+
+
+
+
+augroup vimcmds
+    autocmd!
+    "remove arrow keys
+    nnoremap <up> <nop>
+    nnoremap <down> <nop>
+    nnoremap <left> <nop>
+    nnoremap <right> <nop>
+    inoremap <up> <nop>
+    inoremap <down> <nop>
+    inoremap <left> <nop>
+    inoremap <right> <nop>
+    nnoremap j gj
+    nnoremap k gk
+    "also remove from completion
+    inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+    inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+
+    "http://vim.wikia.com/wiki/Mac_OS_X_clipboard_sharing
+    "map <F2> :.w !pbcopy<CR><CR>
+    "map <F3> :r !pbpaste<CR>
+
+    nmap <F2> :.w !pbcopy<CR><CR>
+    vmap <F2> :w !pbcopy<CR><CR>
+    nmap <F3> :set paste<CR>:r !pbpaste<CR>:set nopaste<CR>
+    imap <F3> <Esc>:set paste<CR>:r !pbpaste<CR>:set nopaste<CR>
+augroup END
+
+
+
+
+augroup commentgroup
+    autocmd!
+
+    "----------------------------------------------------------
+    "http://stackoverflow.com/questions/1676632/whats-a-quick-way-to-comment-uncomment-lines-in-vim
+    let s:comment_map = {
+        \   "c": '\/\/ ',
+        \   "conf": '#',
+        \   "cpp": '\/\/ ',
+        \   "go": '\/\/ ',
+        \   "java": '\/\/ ',
+        \   "javascript": '\/\/ ',
+        \   "php": '\/\/ ',
+        \   "python": '# ',
+        \   "ruby": '# ',
+        \   "r": '#',
+        \   "tex": '%',
+        \   "vim": '" ',
+        \   "sh": '# ',
+        \ }
+
+    function! ToggleComment()
+         if has_key(s:comment_map, &filetype)
+             let comment_leader = s:comment_map[&filetype]
+             if getline('.') =~ "^" . comment_leader
+                 " Uncomment the line
+                 execute "silent s/^" . comment_leader . "//"
+             else
+                 " Comment the line
+                 execute "silent s/^/" . comment_leader . "/"
+             endif
+         else
+             echo "No comment leader found for filetype"
+         end
+     endfunction
+
+    "nnoremap <leader><Space> :call ToggleComment()<cr>
+    "vnoremap <leader><Space> :call ToggleComment()<cr>
+    "previously used @@, but @ register seems to be free
+    nnoremap @@ :call ToggleComment()<cr>
+    vnoremap @@ :call ToggleComment()<cr>
+    "----------------------------------------------------------
+
+ augroup END
+
+"last modified 19 July 2015
