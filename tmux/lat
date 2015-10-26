@@ -1,0 +1,10 @@
+#usage latexdev.conf filename (without tex extension)
+tmux has-session -t latexdev
+if [ $? != 0 ]
+then
+    tmux new-session -s  latexdev -n editor -d
+    #want to open "filename." as "filename.tex", using autocomplete
+    tmux send-keys "vim $1tex" C-m
+    #texext="tex"
+fi
+tmux attach -t latexdev
