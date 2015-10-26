@@ -1,14 +1,14 @@
 "essential vim features
 augroup vimessentials
     autocmd!
-    
     syn on
     set number
-
 
     inoremap <Nul> <C-p>
     inoremap <C-space> <C-p>
 
+    "no swp files and other settings
+    "set noswapfile
     set tabstop=4
     set shiftwidth=4
     set expandtab
@@ -110,7 +110,7 @@ augroup texcmds
     "autocmd FileType tex map <buffer> <F7> :silent !skim: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
     autocmd FileType tex map <buffer> <F5>  :!open /Applications/Skim.app: %:r.pdf  &> /dev/null &<CR>:redraw!<CR>
     autocmd FileType tex map <buffer> <F6> :w<CR>:!pdflatex % <CR><CR>
-"     autocmd FileType tex map <buffer> <F8> :w<CR>:!bibtex %:r.aux <CR><CR>
+    autocmd FileType tex map <buffer> <F8> :w<CR>:!bibtex %:r.aux <CR><CR>
     "autocmd FileType tex setlocal spell spelllang=en_gb
     "autocmd FileType tex map inoremap item<CR> \begin{itemize}<CR> \item<CR><BS>\end{itemize}<Esc>ka<Space>
     "autocmd FileType tex map inoremap item<CR> \begin{itemize}<CR> \item<CR><BS>\end{itemize}<Esc>ka<Space>
@@ -121,7 +121,7 @@ augroup texcmds
     autocmd FileType tex map <buffer> \al<CR> i\begin{align}<CR><CR>\end{align}<Esc>kli<Space>
     autocmd FileType tex map <buffer> \aln<CR> i\begin{align}<CR><CR>%\label{eq:}<CR>%\nonumber<CR>\end{align}<Esc>3ki<Space>
     autocmd FileType tex map <buffer> \frame<CR> i\begin{frame}<CR>\frametitle{}<CR><CR>\end{frame}<Esc>kla
-    autocmd FileType tex map <buffer> \fig<CR> i<CR>\begin{figure}[h]<CR>\centering<CR>\includegraphics[width=10cm]{figurefile}<CR>%\caption{abc}<CR>%\label{fig:}<CR>\end{figure}<CR><Esc>4k$b
+    autocmd FileType tex map <buffer> \fig<CR> i\begin{figure}<CR>\centering<CR>\includegraphics[width=10cm]{fig.XXX}<CR>\end{figure}<Esc>k$a
     autocmd FileType tex map <buffer> \doc<CR> i\documentclass[12pt]{article}<CR>\usepackage{amsmath}<CR>\usepackage{amssymb}<CR>\usepackage{graphicx}<CR><CR>\begin{document}<CR>Hello<CR><CR>\end{document}<Esc>:7<CR>
     autocmd FileType tex map <buffer> \beam<CR> i\documentclass[12pt]{beamer}<CR>\usepackage{amsmath}<CR>\usepackage{amssymb}<CR>\usepackage{graphicx}<CR><CR>\begin{document}<CR>Hello<CR><CR>\end{document}<Esc>:7<CR>
     autocmd FileType tex map <buffer> \sec<CR> i\section{} \label{sec:}<CR><CR><Esc>2k08la
@@ -136,15 +136,6 @@ augroup texcmds
     
     autocmd FileType tex map <buffer> \(<CR> i\left(<Space>\right)<Esc>3ba
     autocmd FileType tex map <buffer> \[<CR> i\left[<Space>\right]<Esc>3ba
-    autocmd FileType tex let b:dispatch = 'pdflatex %'
-
-    autocmd BufNewFile,BufRead *.tex set makeprg=pdflatex\ %\ &&\ open\ %:r.pdf
-    "autocmd FileType tex compiler !pdflatex %
-    "none of these works...
-"     autocmd FileType tex nnoremap <F9> :Dispatch <CR>
-"     autocmd FileType tex map <buffer> <F9> :w<CR>  <CR><CR>
-"     autocmd FileType tex nnoremap <F9> :w<cr> :silent :!pdflatex -interaction=nonstopmode % <cr><cr>
-
 
 "Ideas for creating these functions from:
 "http://vim-latex.sourceforge.net/documentation/latex-suite/latex-master-file.html#Tex_MainFileExpression
@@ -271,13 +262,13 @@ augroup commentgroup
     "----------------------------------------------------------
     "http://stackoverflow.com/questions/1676632/whats-a-quick-way-to-comment-uncomment-lines-in-vim
     let s:comment_map = {
-        \   "c": '\/\/ ',
+        \   "c": '// ',
         \   "conf": '#',
-        \   "cpp": '\/\/ ',
-        \   "go": '\/\/ ',
-        \   "java": '\/\/ ',
-        \   "javascript": '\/\/ ',
-        \   "php": '\/\/ ',
+        \   "cpp": '// ',
+        \   "go": '// ',
+        \   "java": '// ',
+        \   "javascript": '// ',
+        \   "php": '// ',
         \   "python": '# ',
         \   "ruby": '# ',
         \   "r": '#',
