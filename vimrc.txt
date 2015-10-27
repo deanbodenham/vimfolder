@@ -8,7 +8,7 @@ augroup vimessentials
     inoremap <C-space> <C-p>
 
     "no swp files and other settings
-    "set noswapfile
+    set noswapfile
     set tabstop=4
     set shiftwidth=4
     set expandtab
