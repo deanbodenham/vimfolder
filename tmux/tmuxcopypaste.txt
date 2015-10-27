@@ -1,0 +1,24 @@
+# Copy/paste in tmux on Mac OSX, by following instructions from 
+# https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
+# Actually, just need to use the following line in a terminal:
+
+
+when homebrew doesn't work:
+sudo chown -R $USER /usr/local
+
+from 
+http://stackoverflow.com/questions/4804169/installing-in-homebrew-errors
+http://stackoverflow.com/questions/4804169/installing-in-homebrew-errors/5112493#5112493
+
+
+maybe:
+http://stackoverflow.com/questions/25421113/permission-error-with-homebrew
+
+sudo chown -R $USER /Library/Caches/Homebrew
+YES this does it
+
+source ~/.bashrc
+from:
+http://stackoverflow.com/questions/2518127/how-do-i-reload-bashrc-without-logging-out-and-back-in/2518150#2518150
+
+get vim to stop creating swp files
