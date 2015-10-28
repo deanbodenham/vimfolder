@@ -1,10 +1,39 @@
-#usage latexdev.conf filename (without tex extension)
-tmux has-session -t latexdev
+#usage:
+#lat filename. sessionName
+#
+#where: 
+# * "filename." EXCLUDES the "tex" extension, i.e. for file1.tex, just use file1
+#   this is because tabbing for a tex file name usually stops at "filename.", as
+#   there are other files with the same name but different extensions,e.g. file1.aux
+#
+# * "sessionName" is an optional string. 
+#   If this argument is omitted, then "latexdev" will be used
+
+
+
+#check if the second command line argument is null or not (saved in $mysession)
+mysession=$2
+if [ -z "$mysession" ]
+then
+    #if empty used the session name "latexdev"
+    mysession="latexdev"
+fi
+
+#check if this session exists
+tmux has-session -t "$mysession"
 if [ $? != 0 ]
 then
-    tmux new-session -s  latexdev -n editor -d
+    #if session does not exist, then create...
+    tmux new-session -s "$mysession" -n editor -d
+    
+    #...and open filename.tex ...
     #want to open "filename." as "filename.tex", using autocomplete
     tmux send-keys "vim $1tex" C-m
-    #texext="tex"
+
+    #...and attach session
+    tmux attach -t $mysession
+else
+    #if the session already exists (with that name) then just print
+    #an error message to screen
+    echo "a session named $mysession already exists"
 fi
-tmux attach -t latexdev
